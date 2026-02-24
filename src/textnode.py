@@ -5,16 +5,16 @@ class TextType(Enum):
     BOLD = "bold"
     ITALIC = "italic"
     CODE  = "code"
-    links = "links"
+    links = "link"
     images = "images"
 
 class TextNode():
-    def __init__(self, text, text_type, url):
+    def __init__(self, text, text_type, url=None):
         self.text = text
         self.text_type = text_type
-        self.url = url if url else None
+        self.url = url
     
-    def __eg__(self, other):
+    def __eq__(self, other):
         return (
             self.text_type == other.text_type
             and self.text == other.text
@@ -22,4 +22,4 @@ class TextNode():
         )
     
     def __repr__(self):
-        return f"TextNode({self.text}, {self.text_type}, {self.url})"
+        return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
