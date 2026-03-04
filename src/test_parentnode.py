@@ -9,4 +9,4 @@ class TestParentNode(unittest.TestCase):
 
     def test_repr(self):
         node = ParentNode("div", [LeafNode("p", "test")])
-        self.assertEqual(repr(node), "ParentNode(div, [LeafNode(p, test, None)], None)")
+        self.assertEqual(repr(node), "ParentNode(div, children: [LeafNode(p, test, None)], None)")
