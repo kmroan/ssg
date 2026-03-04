@@ -77,68 +77,102 @@ class TestBlockToBlockType(unittest.TestCase):
         self.assertEqual(block_type, BlockType.ORDERED_LIST)
 
 class TestMD2HTML(unittest.TestCase):
+    def test_paragraph(self):
+        md = """
+This is **bolded** paragraph
+text in a p
+tag here
+
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p></div>",
+        )
+
     def test_paragraphs(self):
         md = """
-    This is **bolded** paragraph
-    text in a p
-    tag here
+This is **bolded** paragraph
+text in a p
+tag here
 
-    This is another paragraph with _italic_ text and `code` here
+This is another paragraph with _italic_ text and `code` here
 
-    """
+"""
 
         node = markdown_to_html_node(md)
+        html = node.to_html()
         self.assertEqual(
-            node,
+            html,
             "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
         )
+
+    def test_lists(self):
+        md = """
+- This is a list
+- with items
+- and _more_ items
+
+1. This is an `ordered` list
+2. with items
+3. and more items
+
+"""
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ul><li>This is a list</li><li>with items</li><li>and <i>more</i> items</li></ul><ol><li>This is an <code>ordered</code> list</li><li>with items</li><li>and more items</li></ol></div>",
+        )
+
     def test_headings(self):
         md = """
-        # This is a heading
+# this is an h1
 
-        ## This is a subheading
+this is paragraph text
 
-        ### This is a subsubheading
+## this is an h2
+"""
 
-        #### This is a subsubsubheading
-
-        ##### This is a subsubsubsubheading
-
-        ###### This is a subsubsubsubsubheading 
-        """
         node = markdown_to_html_node(md)
+        html = node.to_html()
         self.assertEqual(
-            node,
-            "<div><h1>This is a heading</h1><h2>This is a subheading</h2><h3>This is a subsubheading</h3><h4>This is a subsubsubheading</h4><h5>This is a subsubsubsubheading</h5><h6>This is a subsubsubsubsubheading</h6></div>",
+            html,
+            "<div><h1>this is an h1</h1><p>this is paragraph text</p><h2>this is an h2</h2></div>",
         )
-    def test_ordered_list(self):
+
+    def test_blockquote(self):
         md = """
-        1. This is a list item
-        2. This is another list item
-        """
+> This is a
+> blockquote block
+
+this is paragraph text
+
+"""
+
         node = markdown_to_html_node(md)
+        html = node.to_html()
         self.assertEqual(
-            node,
-            "<div><ol><li>This is a list item</li><li>This is another list item</li></ol></div>",
+            html,
+            "<div><blockquote>This is a blockquote block</blockquote><p>this is paragraph text</p></div>",
         )
-    def test_unordered_list(self):
+
+    def test_code(self):
         md = """
-        - This is a list item
-        - This is another list item
-        """
+```
+This is text that _should_ remain
+the **same** even with inline stuff
+```
+"""
+
         node = markdown_to_html_node(md)
+        html = node.to_html()
         self.assertEqual(
-            node,
-            "<div><ul><li>This is a list item</li><li>This is another list item</li></ul></div>",
-        )
-    def test_quote(self):
-        md = """
-        > This is a quote
-        """
-        node = markdown_to_html_node(md)
-        self.assertEqual(
-            node,
-            "<div><blockquote>This is a quote</blockquote></div>",
+            html,
+            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )
 if __name__ == "__main__":
     unittest.main()
