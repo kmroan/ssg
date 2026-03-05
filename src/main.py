@@ -19,7 +19,8 @@ def pointless_copy_function(src, dst):
 def main():
     if len(sys.argv) >1:
         basepath = sys.argv[1]
-    basepath = "/"
+    else:
+        basepath = "/"
     print(f"basepath: {basepath}")
 
     if DEBUG:
