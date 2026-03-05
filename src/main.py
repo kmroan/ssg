@@ -1,5 +1,5 @@
 import os, shutil
-from generate_page import generate_page
+from generate_page import generate_pages_recursive
 DEBUG = True
 def pointless_copy_function(src, dst):
     ls = os.listdir(src)
@@ -31,8 +31,7 @@ def main():
         print("Creating public dir")
 
     pointless_copy_function("static/","public/")
-    generate_page("content/index.md", "template.html", "public/index.html")
-    
+    generate_pages_recursive("content/", "template.html", "public/")
     
 
 if __name__ == "__main__":

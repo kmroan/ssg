@@ -21,7 +21,6 @@ def generate_page(from_path, template_path, dest_path):
 
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html)
-    # Write the new full HTML page to a file at dest_path. Be sure to create any necessary directories if they don't exist.
     
     dst_dir = os.path.dirname(dest_path)
     if not os.path.exists(dst_dir):
@@ -31,3 +30,17 @@ def generate_page(from_path, template_path, dest_path):
 
     template_file.close()
     md_file.close()
+
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    ls = os.listdir(dir_path_content)
+    for i in ls:
+        path = os.path.join(dir_path_content, i)
+        if os.path.isfile(path):
+            dstfile = os.path.join(dest_dir_path,i.replace(".md",".html"))
+            print(f"path:{i}")
+            generate_page(path, template_path,dstfile)
+        if os.path.isdir(path):
+            dstpath = os.path.join(dest_dir_path, i)
+            os.makedirs(dstpath)
+            generate_pages_recursive(path, template_path, dstpath)
